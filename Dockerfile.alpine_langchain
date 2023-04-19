@@ -1,0 +1,9 @@
+FROM python:3.10-alpine
+
+WORKDIR /back
+
+COPY ./langchain /langchain
+
+RUN apk add --no-cache git
+RUN apk --no-cache add musl-dev linux-headers g++
+RUN pip install /langchain numpy

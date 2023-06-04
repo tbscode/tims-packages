@@ -1,0 +1,5 @@
+FROM alpine
+
+RUN apk add --no-cache bash
+RUN apk add --no-cache yq
+RUN apk add --no-cache make

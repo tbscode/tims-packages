@@ -25,8 +25,8 @@ RUN apt-get update && apt-get install -y python3 curl
 
 COPY --from=builder /build/local-ai /usr/bin/local-ai
 
-COPY download_models.py .
-COPY create_config.py .
+COPY /Dockerfile_localai/download_models.py .
+COPY /Dockerfile_localai/create_config.py .
 COPY /Dockerfile_localai/run.sh .
 RUN chmod +x run.sh
 

@@ -17,7 +17,7 @@ RUN apt-get update && apt-get install -y cmake
 # reuse global ARG
 ARG BUILD_TYPE
 WORKDIR /build
-RUN make build BUILD_TYPE=$BUILD_TYPE
+RUN make build
 
 # ------------------------------ run stage -----------------------------
 FROM debian:${DEBIAN_VERSION}

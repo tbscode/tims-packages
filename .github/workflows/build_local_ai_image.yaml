@@ -1,0 +1,34 @@
+name: LocalAi Image
+
+on:
+  workflow_dispatch:
+    
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get Head SHA of LocalAI
+        run: |
+          # Use the GitHub REST API to get the HEAD SHA of another repository
+          # Store the SHA in an environment variable
+	  REDIRECT_URL=$(curl --silent https://api.github.com/repos/go-skynet/LocalAI/branches/master | jq -r '.url')
+          echo "COMMIT_SHA=$(curl --silent $REDIRECT_URL | jq -r '.commit.sha')" >> $GITHUB_ENV
+          echo $COMMIT_SHA
+    
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -f Dockerfile.localai -t local-ai-ootb --build-arg COMMIT_SHA=$COMMIT_SHA .
+
+      - name: Tag Docker image with latest and commit hash
+        run: |
+          docker tag local-ai-ootb ghcr.io/tbscode/tims-packages/localai:latest
+          docker tag local-ai-ootb ghcr.io/tbscode/tims-packages/localai:$(git rev-parse --short HEAD)_$COMMIT_SHA
+
+      - name: Authenticated And Publish
+        run: |
+          echo ${{ secrets.BOT_PAT }} | docker login ghcr.io -u ${{ secrets.BOT_USER }} --password-stdin
+          docker push ghcr.io/tbscode/tims-packages/localai:latest
+          docker push ghcr.io/tbscode/tims-packages/localai:$(git rev-parse --short HEAD)_$COMMIT_SHA

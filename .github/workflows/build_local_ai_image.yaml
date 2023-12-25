@@ -12,7 +12,7 @@ jobs:
         run: |
           # Use the GitHub REST API to get the HEAD SHA of another repository
           # Store the SHA in an environment variable
-	  REDIRECT_URL=$(curl --silent https://api.github.com/repos/go-skynet/LocalAI/branches/master | jq -r '.url')
+          REDIRECT_URL="$(curl --silent https://api.github.com/repos/go-skynet/LocalAI/branches/master | jq -r '.url')"
           echo "COMMIT_SHA=$(curl --silent $REDIRECT_URL | jq -r '.commit.sha')" >> $GITHUB_ENV
           echo $COMMIT_SHA
     

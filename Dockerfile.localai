@@ -27,7 +27,7 @@ COPY --from=builder /build/local-ai /usr/bin/local-ai
 
 COPY download_models.py .
 COPY create_config.py .
-COPY run.sh .
+COPY /Dockerfile_localai/run.sh .
 RUN chmod +x run.sh
 
 # We're not using ENTRYPOINT but CMD since it allows for
